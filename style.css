@@ -30,3 +30,18 @@ body{
 .bg-danger, .bg-success{
     color: rgb(255, 255, 255);
 }
+.finish{
+    animation-name: blur;
+    animation-duration: 1s;
+    box-shadow: 6px 6px 14px #00000077, -12px -12px 16px #344779;
+}
+@keyframes blur {
+    0% {
+        filter: blur(1px);
+        filter: brightness(0.2);
+    }
+    100% {
+        filter: blur(0px);
+        filter: brightness(1.0);
+    }
+}

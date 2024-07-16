@@ -26,7 +26,7 @@
       </div>
     </nav>
     <div class="container">
-      <div class="card quizcard">
+      <div id="quizCard" class="card quizcard">
         <img src="img/quizy.jpg" class="card-img-top" alt="Quiz" />
         <div class="card-body">
           <h5 id="questionHeader" class="card-title">Frage</h5>
@@ -46,7 +46,7 @@
 
           <div class="question-footer">
             <span><b id="currentQuest">1</b> von <b id="length">5</b> Fragen</span>
-            <button type="button" class="btn btn-primary">Nächste Frage</button>
+            <button onclick="nextQuestion()" id="button" type="button" disabled class="btn btn-primary">Nächste Frage</button>
           </div>
           
 

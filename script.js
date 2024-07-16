@@ -57,7 +57,7 @@ let questions = [
     }
 ];
 
-let currentQuestion = 3;
+let currentQuestion = 7;
 
 
 function init(){
@@ -67,6 +67,13 @@ function init(){
 
 
 function showQuestion() {
+    if(currentQuestion >= questions.length)
+      { 
+        console.log('Ende');
+        document.getElementById('quizCard').innerHTML= '';
+        document.getElementById('quizCard').innerHTML= finishContent();
+
+      }else{
     let question = questions[currentQuestion];
     document.getElementById('questionHeader').innerText = question['question'];
     document.getElementById('answer_1').innerText = question['answer_1'];
@@ -75,16 +82,55 @@ function showQuestion() {
     document.getElementById('answer_4').innerText = question['answer_4'];
     document.getElementById('currentQuest').innerText = currentQuestion + 1 ;
 }
+}
 
 
 function answer(selection){
     let question = questions[currentQuestion];
-    console.log('Right answer: ', question['right_answer']);
     let selectedQuestionNumber = selection.slice(-1);
+    
+    let rightAnswer = 'answer_' + question['right_answer']
+    
     if(question['right_answer'] == selectedQuestionNumber){
         document.getElementById(selection).parentNode.classList.add('bg-success')
+        document.getElementById('button').disabled = false;
     }
     else{
         document.getElementById(selection).parentNode.classList.add('bg-danger')
+        document.getElementById(rightAnswer).parentNode.classList.add('bg-success')
+        document.getElementById('button').disabled = false;
     }
+}
+
+
+function nextQuestion(){
+     
+        currentQuestion++;
+        document.getElementById('button').disabled = true;
+        removeBackground()
+        showQuestion();
+        
+}
+
+
+function removeBackground(){
+    document.getElementById('answer_1').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_1').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-success');
+}
+
+
+function finishContent(){
+    return  `   <div id="quizCard" class="card quizcard finish">
+                    <img src="img/gameover.jpg" class="card-img-top" alt="Quiz" />
+                    <div class="card-body text-center">
+                        <h5 id="questionHeader" class="card-title">Das Quiz ist zu Ende</h5>
+                    </div>
+                </div>
+            `
 }
