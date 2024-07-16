@@ -18,7 +18,7 @@
     <script src="script.js"></script>
     <title>QuizApp</title>
   </head>
-  <body>
+  <body onload="init()">
     <!-- As a heading -->
     <nav class="navbar bg-body-tertiary">
       <div class="container-fluid">
@@ -27,25 +27,25 @@
     </nav>
     <div class="container">
       <div class="card quizcard">
-        <img src="/img/quizy.jpg" class="card-img-top" alt="Quiz" />
+        <img src="img/quizy.jpg" class="card-img-top" alt="Quiz" />
         <div class="card-body">
-          <h5 class="card-title">Frage</h5>
+          <h5 id="questionHeader" class="card-title">Frage</h5>
 
-          <div class="card mb-2">
-            <div class="card-body">Antwort</div>
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_1')">
+            <div id="answer_1" class="card-body">Antwort</div>
           </div>
-          <div class="card mb-2">
-            <div class="card-body">Antwort</div>
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_2')">
+            <div id="answer_2" class="card-body">Antwort</div>
           </div>
-          <div class="card mb-2">
-            <div class="card-body">Antwort</div>
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_3')">
+            <div id="answer_3" class="card-body">Antwort</div>
           </div>
-          <div class="card mb-2">
-            <div class="card-body">Antwort</div>
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_4')">
+            <div id="answer_4" class="card-body">Antwort</div>
           </div>
 
           <div class="question-footer">
-            <span><b>1</b> von <b>5</b> Fragen</span>
+            <span><b id="currentQuest">1</b> von <b id="length">5</b> Fragen</span>
             <button type="button" class="btn btn-primary">Nächste Frage</button>
           </div>
           
