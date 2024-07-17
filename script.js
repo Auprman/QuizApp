@@ -57,8 +57,8 @@ let questions = [
     }
 ];
 
-let currentQuestion = 7;
-
+let currentQuestion = 0;
+let correctAnswers = 0;
 
 function init(){
     document.getElementById('length').innerText = questions.length;
@@ -67,20 +67,27 @@ function init(){
 
 
 function showQuestion() {
+    let percent = currentQuestion / questions.length * 100;
+    let percentInteger = percent.toFixed(0);
+    let question = questions[currentQuestion];
+    
     if(currentQuestion >= questions.length)
       { 
         console.log('Ende');
         document.getElementById('quizCard').innerHTML= '';
         document.getElementById('quizCard').innerHTML= finishContent();
+        document.getElementById('progress-bar-finished').style.width = `${percentInteger}%`;
+        document.getElementById('progress-bar-finished').innerText = `${percentInteger} %`;
 
       }else{
-    let question = questions[currentQuestion];
     document.getElementById('questionHeader').innerText = question['question'];
     document.getElementById('answer_1').innerText = question['answer_1'];
     document.getElementById('answer_2').innerText = question['answer_2'];
     document.getElementById('answer_3').innerText = question['answer_3'];
     document.getElementById('answer_4').innerText = question['answer_4'];
     document.getElementById('currentQuest').innerText = currentQuestion + 1 ;
+    document.getElementById('progress-bar').style.width = `${percentInteger}%`;
+    document.getElementById('progress-bar').innerText = `${percentInteger} %`;
 }
 }
 
@@ -94,6 +101,7 @@ function answer(selection){
     if(question['right_answer'] == selectedQuestionNumber){
         document.getElementById(selection).parentNode.classList.add('bg-success')
         document.getElementById('button').disabled = false;
+        correctAnswers++;
     }
     else{
         document.getElementById(selection).parentNode.classList.add('bg-danger')
@@ -128,8 +136,14 @@ function removeBackground(){
 function finishContent(){
     return  `   <div id="quizCard" class="card quizcard finish">
                     <img src="img/gameover.jpg" class="card-img-top" alt="Quiz" />
+                    <div class="progress">
+                        <div id="progress-bar-finished" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                    </div>
                     <div class="card-body text-center">
                         <h5 id="questionHeader" class="card-title">Das Quiz ist zu Ende</h5>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <span id="questionHeader" class="card-title span-center-mb">Du hast <b>${correctAnswers}</b> von <b>${questions.length}</b> Fragen richtig beantwortet.</span> 
                     </div>
                 </div>
             `

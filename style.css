@@ -45,3 +45,7 @@ body{
         filter: brightness(1.0);
     }
 }
+.span-center-mb{
+    text-align: center;
+    padding-bottom: 16px;
+}
