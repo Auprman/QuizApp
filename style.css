@@ -49,3 +49,7 @@ body{
     text-align: center;
     padding-bottom: 16px;
 }
+.progress-bar {
+    background-color: #50649b;
+}
+

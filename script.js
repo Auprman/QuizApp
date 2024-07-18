@@ -60,8 +60,12 @@ let questions = [
 let currentQuestion = 0;
 let correctAnswers = 0;
 
+let AUDIO_SUCCESS = new Audio('sounds/success.mp3');
+let AUDIO_FAIL = new Audio('sounds/fail.mp3');
+
 function init(){
     document.getElementById('length').innerText = questions.length;
+    
     showQuestion();
 }
 
@@ -71,43 +75,42 @@ function showQuestion() {
     let percentInteger = percent.toFixed(0);
     let question = questions[currentQuestion];
     
-    if(currentQuestion >= questions.length)
+    if(gameIsOver())
       { 
-        console.log('Ende');
-        document.getElementById('quizCard').innerHTML= '';
-        document.getElementById('quizCard').innerHTML= finishContent();
-        document.getElementById('progress-bar-finished').style.width = `${percentInteger}%`;
-        document.getElementById('progress-bar-finished').innerText = `${percentInteger} %`;
-
+        showEndScreen();
       }else{
-    document.getElementById('questionHeader').innerText = question['question'];
-    document.getElementById('answer_1').innerText = question['answer_1'];
-    document.getElementById('answer_2').innerText = question['answer_2'];
-    document.getElementById('answer_3').innerText = question['answer_3'];
-    document.getElementById('answer_4').innerText = question['answer_4'];
-    document.getElementById('currentQuest').innerText = currentQuestion + 1 ;
-    document.getElementById('progress-bar').style.width = `${percentInteger}%`;
-    document.getElementById('progress-bar').innerText = `${percentInteger} %`;
+        updateToNextQuestion();
+        updateProgressBar();
 }
 }
 
+function gameIsOver(){
+  return currentQuestion >= questions.length
+}
 
 function answer(selection){
     let question = questions[currentQuestion];
     let selectedQuestionNumber = selection.slice(-1);
-    
     let rightAnswer = 'answer_' + question['right_answer']
     
-    if(question['right_answer'] == selectedQuestionNumber){
+    if(rightAnswerSelected(selectedQuestionNumber, question)){
         document.getElementById(selection).parentNode.classList.add('bg-success')
         document.getElementById('button').disabled = false;
+        AUDIO_SUCCESS.play();
         correctAnswers++;
     }
     else{
         document.getElementById(selection).parentNode.classList.add('bg-danger')
         document.getElementById(rightAnswer).parentNode.classList.add('bg-success')
         document.getElementById('button').disabled = false;
+        AUDIO_FAIL.play();
     }
+}
+
+
+function rightAnswerSelected(selectedQuestionNumber, question){
+
+  return selectedQuestionNumber == question['right_answer'];
 }
 
 
@@ -140,11 +143,96 @@ function finishContent(){
                         <div id="progress-bar-finished" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
                     </div>
                     <div class="card-body text-center">
-                        <h5 id="questionHeader" class="card-title">Das Quiz ist zu Ende</h5>
+                        <h5 id="questionHeader" class="card-title">Quiz beendet</h5>
+                        <button onclick="restartGame()" id="buttonRestart" type="button"class="btn btn-primary">Erneut spielen</button>
                     </div>
                     <div class="d-flex justify-content-center">
                         <span id="questionHeader" class="card-title span-center-mb">Du hast <b>${correctAnswers}</b> von <b>${questions.length}</b> Fragen richtig beantwortet.</span> 
                     </div>
                 </div>
             `
+}
+
+
+function restartGame(){
+    currentQuestion = 0;
+    document.body.innerHTML = startContent()
+    init();
+}
+
+
+function startContent(){
+    return `
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">QuizApp</span>
+      </div>
+    </nav>
+    <div class="container">
+     
+        <div id="quizCard" class="card quizcard">
+        <img src="img/quizy.jpg" class="card-img-top" alt="Quiz" />
+ 
+      <div class="progress">
+        <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+      </div>
+        
+        <div class="card-body">
+          <h5 id="questionHeader" class="card-title">Frage</h5>
+
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_1')">
+            <div id="answer_1" class="card-body">Antwort</div>
+          </div>
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_2')">
+            <div id="answer_2" class="card-body">Antwort</div>
+          </div>
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_3')">
+            <div id="answer_3" class="card-body">Antwort</div>
+          </div>
+          <div class="card quiz-answer-card mb-2" onclick="answer('answer_4')">
+            <div id="answer_4" class="card-body">Antwort</div>
+          </div>
+
+          <div class="question-footer">
+            <span><b id="currentQuest">1</b> von <b id="length">5</b> Fragen</span>
+            <button onclick="nextQuestion()" id="button" type="button" disabled class="btn btn-primary">Nächste Frage</button>
+          </div>
+    
+        </div>
+      </div>
+    </div>
+    ` 
+}
+
+
+function showEndScreen(){
+  
+    let percent = currentQuestion / questions.length * 100;
+    let percentInteger = percent.toFixed(0);
+    document.getElementById('quizCard').innerHTML= '';
+    document.getElementById('quizCard').innerHTML= finishContent();
+    document.getElementById('progress-bar-finished').style.width = `${percentInteger}%`;
+    document.getElementById('progress-bar-finished').innerText = `${percentInteger} %`;
+}
+
+
+function updateToNextQuestion(){
+  
+    let question = questions[currentQuestion];
+    document.getElementById('questionHeader').innerText = question['question'];
+    document.getElementById('answer_1').innerText = question['answer_1'];
+    document.getElementById('answer_2').innerText = question['answer_2'];
+    document.getElementById('answer_3').innerText = question['answer_3'];
+    document.getElementById('answer_4').innerText = question['answer_4'];
+    document.getElementById('currentQuest').innerText = currentQuestion + 1 ;
+   
+}
+
+
+function updateProgressBar(){
+    let percent = currentQuestion / questions.length * 100;
+    let percentInteger = percent.toFixed(0);
+
+    document.getElementById('progress-bar').style.width = `${percentInteger}%`;
+    document.getElementById('progress-bar').innerText = `${percentInteger} %`;
 }
